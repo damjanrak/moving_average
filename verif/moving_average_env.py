@@ -2,7 +2,7 @@ from pygears import gear
 from pygears.sim import sim
 from pygears.sim.modules import drv, SimVerilated
 from pygears.typing import Int, typeof, Queue
-from moving_average import moving_average, TCfg
+from moving_average.moving_average import moving_average, TCfg
 from pygears.sim.extens.vcd import VCD
 
 

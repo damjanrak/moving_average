@@ -2,8 +2,7 @@ import numpy as np
 from numpy import sin, pi, arange
 from pg_dsp.utils.py_libs.fixp import Quantizer
 from scipy.io.wavfile import write
-# from moving_average.moving_average import TCfg
-from moving_average_env import moving_average_sim
+from verif.moving_average_env import moving_average_sim
 
 
 def example_synthetic(nsamples,
