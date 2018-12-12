@@ -1,7 +1,10 @@
+from pygears import bind
+from functools import partial
+from pygears_view import PyGearsView
 from pygears import gear
 from pygears.sim import sim
 from pygears.sim.modules import drv, SimVerilated
-from pygears.typing import Int, typeof, Queue
+from pygears.typing import Uint, Int, typeof, Queue
 from moving_average.moving_average import moving_average, TCfg
 from pygears.sim.extens.vcd import VCD
 
@@ -29,14 +32,16 @@ def moving_average_sim(din,
                        cosim=True):
 
     result = []
-    din = drv(t=Queue[Int[sample_width]], seq=[din])
-    din_cfg = drv(t=TCfg[sample_width], seq=[cfg])
 
-    din \
-        | moving_average(din_cfg,
+    din_drv = drv(t=Queue[Uint[sample_width]], seq=[din])
+    cfg_drv = drv(t=TCfg[sample_width], seq=[cfg])
+
+    din_drv \
+        | moving_average(cfg_drv,
                          sim_cls=SimVerilated if cosim else None) \
         | collect(result=result, samples_num=None)
 
-    sim(outdir='./build', extens=[VCD])
+    bind('svgen/debug_intfs', ['*'])
+    sim(outdir='./build', extens=[VCD, partial(PyGearsView, live=True)])
 
     return result
