@@ -1,6 +1,6 @@
 from pygears import bind
-from functools import partial
-from pygears_view import PyGearsView
+# from functools import partial
+# from pygears_view import PyGearsView
 from pygears import gear
 from pygears.sim import sim
 from pygears.sim.modules import drv, SimVerilated
@@ -42,6 +42,6 @@ def moving_average_sim(din,
         | collect(result=result, samples_num=None)
 
     bind('svgen/debug_intfs', ['*'])
-    sim(outdir='./build', extens=[VCD, partial(PyGearsView, live=True)])
+    sim(outdir='./build', extens=[VCD]) #, partial(PyGearsView, live=True)
 
     return result
