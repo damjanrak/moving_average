@@ -1,9 +1,19 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from random import gauss
 from numpy import sin, pi, arange
 from pg_dsp.utils.py_libs.fixp import Quantizer
 from scipy.io.wavfile import write
 from verif.moving_average_env import moving_average_sim
+
+
+def add_white_gaussian_noise(signal, magnitude):
+    with_noise = []
+    gaussian_noise = [gauss(0.0, 1.0) for i in range(len(signal))]
+    for i, sample in enumerate(signal):
+        with_noise.append(sample + magnitude*gaussian_noise[i])
+
+    return with_noise
 
 
 def uint_to_int(samples):
@@ -22,8 +32,9 @@ def example_synthetic(nsamples,
                       window_size=20):
 
     t = arange(nsamples) / sample_rate_hz
-    x = 0.8*sin(2*pi*100*t) \
-        + 0.2*sin(2*pi*6000*t) \
+
+    x = 0.8*sin(2*pi*100*t)
+    x = add_white_gaussian_noise(x, 0.2)
 
     # quantizer for hardware input preparation
     q = Quantizer(
@@ -68,4 +79,4 @@ def example_synthetic(nsamples,
 
 
 if __name__ == "__main__":
-    example_synthetic(nsamples=10000, window_size=100)
+    example_synthetic(nsamples=10000, window_size=50)
